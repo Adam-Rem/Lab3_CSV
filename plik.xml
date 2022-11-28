@@ -1,0 +1,39 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Table1>
+    <Tytuł>Pomruk</Tytuł>
+    <Autor>Michał Śmielak</Autor>
+    <ID>1</ID>
+    <Wydawnictwo>Skarpa Warszawska</Wydawnictwo>
+    <Status>Na stanie</Status>
+    <Rok>2022</Rok>
+    <Miasto>Poznań</Miasto>
+  </Table1>
+  <Table1>
+    <Tytuł>SEXEDPL</Tytuł>
+    <Autor>Anja Rubik</Autor>
+    <ID>2</ID>
+    <Wydawnictwo>W.A.B</Wydawnictwo>
+    <Status>Na stanie</Status>
+    <Rok>2022</Rok>
+    <Miasto>Poznań</Miasto>
+  </Table1>
+  <Table1>
+    <Tytuł>Makta siedzi z tyłu</Tytuł>
+    <Autor>Joanna Mokosa-Rykalska</Autor>
+    <ID>3</ID>
+    <Wydawnictwo>Wielka Litera</Wydawnictwo>
+    <Status>Wypożyczona</Status>
+    <Rok>2021</Rok>
+    <Miasto>Warszawa</Miasto>
+  </Table1>
+  <Table1>
+    <Tytuł>Some Mistakes Were Made</Tytuł>
+    <Autor>Kristin Dwyer</Autor>
+    <ID>4</ID>
+    <Wydawnictwo>Chilli Books</Wydawnictwo>
+    <Status>Wypożyczona</Status>
+    <Rok>2022</Rok>
+    <Miasto>Warszwa</Miasto>
+  </Table1>
+</NewDataSet>

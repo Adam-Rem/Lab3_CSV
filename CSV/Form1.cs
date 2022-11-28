@@ -1,15 +1,19 @@
 using System.Data;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace CSV
 {
+    
+
     public partial class Form1 : Form
     {
-        private const string V = "Tytul,Autor,ID\n";
-        public static string tytul, autor, id;
+        
+ 
         public static int index,maxrow;
         public static DataTable dt = new DataTable();
+        public static DataSet dataSet = new DataSet();
         
         public Form1()
         {
@@ -19,9 +23,7 @@ namespace CSV
         private void Form1_Load(object sender, EventArgs e)
         {
 
-        }
-
-        
+        }        
 
         public static DataTable readCSV(string filePath) 
         {         
@@ -43,14 +45,8 @@ namespace CSV
 
         private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            index = e.RowIndex;
-            DataGridViewRow selectedRow = dataGridView1.Rows[index];
-            tytul = selectedRow.Cells[0].Value.ToString();
-            autor = selectedRow.Cells[1].Value.ToString();
-            id = selectedRow.Cells[2].Value.ToString();
 
-            
-        } //wybieranie indeksu zaznaczonego
+        }
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -59,24 +55,31 @@ namespace CSV
 
         private void button1_Click(object sender, EventArgs e)
         {
+            
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.ShowDialog(this);
-
-
-            File.WriteAllText(openFileDialog.FileName, V);
-                
-                foreach (DataGridViewRow item in dataGridView1.Rows)
-                {
-                if (item.Index<dataGridView1.RowCount-1)
-                    {
-                    string lines = item.Cells[0].Value.ToString() + ',' + item.Cells[1].Value.ToString() + ',' + item.Cells[2].Value.ToString() + '\n';
-
-                    File.AppendAllText(openFileDialog.FileName, lines);
-                    }
-                
-                }
+            dt.ToCSV(openFileDialog.FileName);      
             
-        } //zapis
+        } //zapis do CSV
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.ShowDialog(this);
+            dataSet.WriteXml(openFileDialog.FileName);
+            
+        }//zapis do XML
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.ShowDialog(this);
+            dataSet.ReadXml(openFileDialog.FileName);
+            dt = dataSet.Tables[0];
+            dataGridView1.DataSource = dataSet.Tables[0];
+
+        }//otwieranie XML
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -89,18 +92,16 @@ namespace CSV
         {
           
             Hide();
-            maxrow = dataGridView1.RowCount;
+            
             Form2 form2 = new Form2();
+
             form2.ShowDialog();
             form2 = null;           // zamkniêcie formsa 2
 
 
             dataGridView1.DataSource = dt;
             DataGridViewRow selectedRow = dataGridView1.Rows[index];
-            selectedRow.Cells[0].Value = tytul;
-            selectedRow.Cells[1].Value = autor;
-            selectedRow.Cells[2].Value = id;
-            
+                       
             
             
             
@@ -116,5 +117,47 @@ namespace CSV
             return dt;
         }  //dodawanie rowa
 
+    }
+    public static class CSVUtlity
+    {
+        public static void ToCSV(this DataTable dtDataTable, string strFilePath)
+        {
+            StreamWriter sw = new StreamWriter(strFilePath, false);
+            //headers    
+            for (int i = 0; i < dtDataTable.Columns.Count; i++)
+            {
+                sw.Write(dtDataTable.Columns[i]);
+                if (i < dtDataTable.Columns.Count - 1)
+                {
+                    sw.Write(",");
+                }
+            }
+            sw.Write(sw.NewLine);
+            foreach (DataRow dr in dtDataTable.Rows)
+            {
+                for (int i = 0; i < dtDataTable.Columns.Count; i++)
+                {
+                    if (!Convert.IsDBNull(dr[i]))
+                    {
+                        string value = dr[i].ToString();
+                        if (value.Contains(','))
+                        {
+                            value = String.Format("\"{0}\"", value);
+                            sw.Write(value);
+                        }
+                        else
+                        {
+                            sw.Write(dr[i].ToString());
+                        }
+                    }
+                    if (i < dtDataTable.Columns.Count - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write(sw.NewLine);
+            }
+            sw.Close();
+        }
     }
 }
